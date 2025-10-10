@@ -11,16 +11,16 @@ import type { Note } from '../../types/note';
 import NoteList from '../NoteList/NoteList';
 import Modal from "../Modal/Modal";
 import {Toaster} from "react-hot-toast";
+import ReactPaginate from 'react-paginate';
 
 export default function App() {
   const queryClient = useQueryClient(); 
-  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
-  const [note, setNote] = useState(0);
+  const [searchQuery, setSearchQuery] = useState<Note | null>(null);
   const [page, setPage] = useState(1);
 
   const {data, isLoading, isError, isSuccess} = useQuery({
-    queryKey: ['notes', note, page],
-    queryFn: () => fetchNotes(note, page, perPage),
+    queryKey: ['notes', searchQuery, page],
+    queryFn: () => fetchNotes(searchQuery, page),
     placeholderData: keepPreviousData,
   });
 
@@ -28,7 +28,7 @@ export default function App() {
 
 
    const handleSearch = async(newNote: string) => {
-      setNote(newNote);
+      setSearchQuery(value);
       setPage(1);
 
    }
@@ -44,29 +44,23 @@ export default function App() {
 return (
  <div className={css.app}>
 	<header className={css.toolbar}>
-		<SearchBox onSubmit={handleSearch}/>
+		<SearchBox onSearch={handleSearch}/>
     
     {isSuccess && totalPages > 1 && (
       <ReactPaginate
         pageCount={totalPages}
-        pageRangeDisplayed={5}
-        marginPagesDisplayed={1}
         onPageChange={({ selected }) => setPage(selected + 1)}
         forcePage={page - 1}
         containerClassName={css.pagination}
         activeClassName={css.active}
-        nextLabel="→"
-        previousLabel="←"
       />
     )}
 		<button className={css.button}>Create note +</button>
-    {isLoading && <Loader/>}
+  </header>
+   {isLoading && <Loader/>}
     {isError && <ErrorMessage/>}
     {isSuccess && data?.results.length > 0 && ( <NoteList onSelect={openModal} notes={data.results}/>)}
-    {selectedNote && <Modal movie={selectedNote} onClose={closeModal}/>}
      <Toaster position="top-right" reverseOrder={false}/>
-  </header>
-  {}
 </div>
    
   )

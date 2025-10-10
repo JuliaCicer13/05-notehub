@@ -8,15 +8,15 @@ interface FetchNotesResponse {
 }
 
 export const fetchNotes = async (
-  query: string,
+  search: string,
   page: number,
-  perPage:number,
+  perPage: 12,
 
 ): Promise<FetchNotesResponse> => {
    const response =  await axios.get<FetchNotesResponse>("https://notehub-public.goit.study/api/notes?page=1&perPage=12",
     {
      params: {
-      query,
+      search,
       page,
       perPage
      } ,
