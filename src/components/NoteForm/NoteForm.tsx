@@ -1,36 +1,57 @@
 import css from "../NoteForm/NoteForm.module.css"
+import { useId } from "react";
+import { Formik, Form, Field , type FormikHelpers} from "formik";
 
+interface OrderFormValues {
+  username: string;
+  email: string;
+  tag: string;
+}
+
+const initialValues: OrderFormValues = {
+  username: "",
+  email: "",
+  tag: "",
+};
 
 export default function NoteForm () {
-  return (
-    <form className={css.form}>
+const fieldId = useId();
+
+const handleSubmit = (
+  values: OrderFormValues,
+  actions: FormikHelpers<OrderFormValues>
+) => {
+  console.log("Order data:", values);
+  actions.resetForm();
+}
+
+return (
+<Formik initialValues={{initialValues}} onSubmit={() => {handleSubmit}}>
+  <Form className={css.form}>
   <div className={css.formGroup}>
-    <label htmlFor="title">Title</label>
-    <input id="title" type="text" name="title" className={css.input} />
-    <span name="title" className={css.error} />
+    <label htmlFor={`${fieldId}-username`}>Title</label>
+    <Field id="title" type="text" name="title" className={css.input} />
   </div>
 
   <div className={css.formGroup}>
     <label htmlFor="content">Content</label>
-    <textarea
+    <Field as="textarea"
       id="content"
       name="content"
       rows={8}
       className={css.textarea}
     />
-    <span name="content" className={css.error} />
   </div>
 
   <div className={css.formGroup}>
     <label htmlFor="tag">Tag</label>
-    <select id="tag" name="tag" className={css.select}>
+    <Field as="select" id={`${fieldId}-tag`} name="tag" className={css.select}>
       <option value="Todo">Todo</option>
       <option value="Work">Work</option>
       <option value="Personal">Personal</option>
       <option value="Meeting">Meeting</option>
       <option value="Shopping">Shopping</option>
-    </select>
-    <span name="tag" className={css.error} />
+    </Field>
   </div>
 
   <div className={css.actions}>
@@ -45,7 +66,6 @@ export default function NoteForm () {
       Create note
     </button>
   </div>
-</form>
-  )
-    
-}
+  </Form>
+</Formik>
+  )}
