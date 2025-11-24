@@ -13,7 +13,7 @@ export const fetchNotes = async (
   perPage: 12,
 
 ): Promise<FetchNotesResponse> => {
-   const response =  await axios.get<FetchNotesResponse>("https://notehub-public.goit.study/api/notes?page=1&perPage=12",
+   const response =  await axios.get<FetchNotesResponse>("https://notehub-public.goit.study/api/docs",
     {
      params: {
       search,

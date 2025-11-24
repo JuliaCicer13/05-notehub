@@ -1,6 +1,7 @@
 import css from "../NoteForm/NoteForm.module.css"
 import { useId } from "react";
 import { Formik, Form, Field , type FormikHelpers} from "formik";
+import * as Yup from "yup";
 
 interface OrderFormValues {
   username: string;
@@ -25,8 +26,21 @@ const handleSubmit = (
   actions.resetForm();
 }
 
+const OrderFormSchema = Yup.object().shape({
+  title: Yup.string()
+  .min(3)
+  .max(50)
+  .required(),
+  tag: Yup.string()
+   .tag( "Todo","Work", "Personal", "Meeting", "Shopping")
+   .required(),
+});
+
+
 return (
-<Formik initialValues={{initialValues}} onSubmit={() => {handleSubmit}}>
+<Formik initialValues={initialValues}
+        validationSchema={OrderFormSchema}
+        onSubmit={() => {handleSubmit}}>
   <Form className={css.form}>
   <div className={css.formGroup}>
     <label htmlFor={`${fieldId}-username`}>Title</label>

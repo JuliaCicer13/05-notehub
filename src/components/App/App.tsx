@@ -28,7 +28,7 @@ export default function App() {
 
 
    const handleSearch = async(newNote: string) => {
-      setSearchQuery(value);
+      setSearchQuery(searchQuery);
       setPage(1);
 
    }
