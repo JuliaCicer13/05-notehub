@@ -28,7 +28,6 @@ export default function App() {
      console.log(`Make HTTP request with: ${inputValue}`);
   }, [inputValue]);
 
-  }
  
   const {data, isLoading, isError, isSuccess} = useQuery({
     queryKey: ['notes', searchQuery, page],
@@ -71,20 +70,12 @@ export default function App() {
 
    }
 
-   const openModal = (note: Note) => {
-    setSelectedNote(note);
-  };
-
-  const closeModal = () => {
-    setSelectedNote(null);
-  };
-
 return (
  <div className={css.app}>
 	<header className={css.toolbar}>
 		<SearchBox onSearch={handleSearch}/>
     
-    {isSuccess && totalPages > 1 && (
+    {data?.results.length  > 0 && isSuccess && totalPages > 1 && (
       <ReactPaginate
         pageCount={totalPages}
         onPageChange={({ selected }) => setPage(selected + 1)}
@@ -105,4 +96,4 @@ return (
 </div>
    
   )
-
+}
