@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import css from '../App/App.module.css'
 import SearchBox from "../SearchBox/SearchBox";
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
@@ -20,25 +20,37 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [inputValue, setInputValue] = useState("");
 
-  const handleSearch = (event:React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value)
+  const handleSearch = useDebouncedCallback((event:React.ChangeEvent<HTMLInputElement>) =>
+    setInputValue(event.target.value),
+    1000
+  );
+   useEffect(() => {
+     console.log(`Make HTTP request with: ${inputValue}`);
+  }, [inputValue]);
+
   }
+ 
   const {data, isLoading, isError, isSuccess} = useQuery({
     queryKey: ['notes', searchQuery, page],
     queryFn: () => fetchNotes(searchQuery, page, perPage),
     placeholderData: keepPreviousData,
   });
 
+  const updateSearchQuery = useDebouncedCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value),
+    300
+  );
+
   const mutation = useMutation({
     mutationFn: async (newNote) => {
     const res = await axios.post("https://notehub-public.goit.study/api/notes", newNote);
        return res.data;
     },
-    onSuccess: () => {
+    onSuccess: (isSuccess) => {
       queryClient.invalidateQueries({queryKey:['notes']});
      console.log("Todo added successfully");
     }, 
-    onError: (error) => {
+    onError: (ErrorMessage) => {
       
     }
   });
@@ -93,4 +105,4 @@ return (
 </div>
    
   )
-}
+

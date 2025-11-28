@@ -8,7 +8,7 @@ interface FetchNotesResponse {
 }
 
 export const fetchNotes = async (
-  search: string,
+  searchQuery: string,
   page: number,
   perPage: 12,
 
@@ -16,7 +16,7 @@ export const fetchNotes = async (
    const response =  await axios.get<FetchNotesResponse>("https://notehub-public.goit.study/api/docs",
     {
      params: {
-      search,
+      searchQuery,
       page,
       perPage
      } ,
