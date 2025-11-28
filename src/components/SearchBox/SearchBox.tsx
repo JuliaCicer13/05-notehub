@@ -5,13 +5,15 @@ interface OrderFormValues {
   username: string;
   email: string;
   tag: string;
+  onSearch: (newValue: string) => void;
 }
 
 const initialValues: OrderFormValues = {
   username: "",
   email: "",
   tag: "",
-};
+  onSearch: (newValue: string) => void;
+}
 
 export default function SearchBox () {
   const handleSubmit = (
