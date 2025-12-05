@@ -1,71 +1,56 @@
 import css from "../NoteForm/NoteForm.module.css"
 import { useId } from "react";
-import { Formik, Form, Field , type FormikHelpers} from "formik";
+import { Formik, Form, Field} from "formik";
 import { useMutation, useQueryClient} from '@tanstack/react-query';
-import type {Note} from "../../types/note";
 import * as Yup from "yup";
 import {createNote} from "../../services/noteService"
 
-interface OrderFormValues {
-  username: string;
-  email: string;
-  tag: string;
-  onSuccess: () => void;
+interface NoteFormProps {
+ onSuccess: () => void;
 }
 
-const initialValues: OrderFormValues = {
-  username: "",
-  email: "",
-  tag: "",
+interface FormValues {
+  title: string,
+  content: string,
+  tag: string,
 };
 
-export default function NoteForm ({onSuccess}: OrderFormValues) {
-  const queryClient = useQueryClient();
+const initialValues: FormValues = {
+  title: "",
+  content: "",
+  tag: "Todo",
+};
 
+export default function NoteForm ({onSuccess}: NoteFormProps) {
+const queryClient = useQueryClient();
 const fieldId = useId();
 
 const {mutate, isPending} = useMutation({
-  mutationFn: (data: Note) => createNote(data)
+  mutationFn: createNote,
+  onSuccess: () => {
+    queryClient.invalidateQueries({queryKey: ["notes"]});
+    onSuccess();
+  },
+  onError: (error) => {
+    console.log(error);
+  },
 });
 
- const handleCreateNote = [data: FormData] => {
-      mutate({
-      title: data.get("My new note") as string
-    }, {
-      onSuccess: () => {
-       queryClient.invalidateQueries({queryKey: ("notes")});
-       onSuccess();
-      },
-      onError: (error) => {
-       console.log(error);
-      }
-    })
-  }
 
-
-const handleSubmit = (
-  values: OrderFormValues,
-  actions: FormikHelpers<OrderFormValues>
-) => {
-  console.log("Order data:", values);
-  actions.resetForm();
-}
-
-const OrderFormSchema = Yup.object().shape({
-  title: Yup.string()
-  .min(3)
-  .max(50)
-  .required(),
-  tag: Yup.string()
-   .tag( "Todo","Work", "Personal", "Meeting", "Shopping")
-   .required(),
+const validationSchema = Yup.object().shape({
+  title: Yup.string().min(3).max(50).required("Title is required"),
+  content: Yup.string().min(3).required("Content is required"),
+  tag: Yup.string().required(),
 });
 
+const handleSubmit = (values: FormValues) => {
+  mutate(values);
+};
 
 return (
 <Formik initialValues={initialValues}
-        validationSchema={OrderFormSchema}
-        onSubmit={() => {handleSubmit}}>
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}>
   <Form className={css.form}>
   <div className={css.formGroup}>
     <label htmlFor={`${fieldId}-username`}>Title</label>
@@ -94,16 +79,9 @@ return (
   </div>
 
   <div className={css.actions}>
-    <button type="button" className={css.cancelButton}>
-      Cancel
-    </button>
-    <button
-      type="submit"
-      className={css.submitButton}
-      disabled=false
-      onClick={handleCreateNote}
-    >
-      Create note
+    <button type="button" className={css.cancelButton}> Cancel</button>
+    <button type="submit" className={css.submitButton} disabled={isPending}>
+     {isPending ? "Creating...": "Create note" }
     </button>
   </div>
   </Form>

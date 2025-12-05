@@ -18,8 +18,10 @@ export default function App() {
   const [page, setPage] = useState(1);
   const perPage = 12;
   const [inputValue, setInputValue] = useState("");
+  
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
 
   const handleSearch = useDebouncedCallback(
     (value:string) => {
@@ -28,7 +30,6 @@ export default function App() {
    },
     500
   );
-
 
   const {data, isLoading, isError, isSuccess} = useQuery({
     queryKey: ['notes', searchQuery, page],
