@@ -1,12 +1,16 @@
 import css from "../NoteForm/NoteForm.module.css"
 import { useId } from "react";
 import { Formik, Form, Field , type FormikHelpers} from "formik";
+import { useMutation, useQueryClient} from '@tanstack/react-query';
+import type {Note} from "../../types/note";
 import * as Yup from "yup";
+import {createNote} from "../../services/noteService"
 
 interface OrderFormValues {
   username: string;
   email: string;
   tag: string;
+  onSuccess: () => void;
 }
 
 const initialValues: OrderFormValues = {
@@ -15,8 +19,29 @@ const initialValues: OrderFormValues = {
   tag: "",
 };
 
-export default function NoteForm () {
+export default function NoteForm ({onSuccess}: OrderFormValues) {
+  const queryClient = useQueryClient();
+
 const fieldId = useId();
+
+const {mutate, isPending} = useMutation({
+  mutationFn: (data: Note) => createNote(data)
+});
+
+ const handleCreateNote = [data: FormData] => {
+      mutate({
+      title: data.get("My new note") as string
+    }, {
+      onSuccess: () => {
+       queryClient.invalidateQueries({queryKey: ("notes")});
+       onSuccess();
+      },
+      onError: (error) => {
+       console.log(error);
+      }
+    })
+  }
+
 
 const handleSubmit = (
   values: OrderFormValues,
@@ -76,6 +101,7 @@ return (
       type="submit"
       className={css.submitButton}
       disabled=false
+      onClick={handleCreateNote}
     >
       Create note
     </button>
