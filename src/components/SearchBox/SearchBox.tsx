@@ -1,21 +1,21 @@
 import css from "../SearchBox/SearchBox.module.css"
 import {Formik, Form, Field, type FormikHelpers } from "formik";
 
+interface OrderFormFunction {
+    search: string;
+    onSearch: (newValue: string) => void;
+}
 interface OrderFormValues {
-  username: string;
-  email: string;
+  search: string;
   tag: string;
-  onSearch: (newValue: string) => void;
 }
 
 const initialValues: OrderFormValues = {
-  username: "",
-  email: "",
+  search: "",
   tag: "",
-  onSearch: (newValue: string) => void;
 }
 
-export default function SearchBox () {
+export default function SearchBox ({search, onSearch}: OrderFormFunction) {
   const handleSubmit = (
     values: OrderFormValues,
     actions: FormikHelpers<OrderFormValues>
@@ -29,6 +29,8 @@ export default function SearchBox () {
   <Field
   className={css.input}
   type="text"
+  defaultValue={search}
+  onChange={onSearch}
   placeholder="Search notes"
  />
     </Form>

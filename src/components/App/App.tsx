@@ -14,10 +14,10 @@ import ReactPaginate from 'react-paginate';
 
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [search, setSearchQuery] = useState<string>("");
   const [page, setPage] = useState(1);
   const perPage = 12;
-  const [inputValue, setInputValue] = useState("");
+
   
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -32,8 +32,8 @@ export default function App() {
   );
 
   const {data, isLoading, isError, isSuccess} = useQuery({
-    queryKey: ['notes', searchQuery, page],
-    queryFn: () => fetchNotes(searchQuery, page, perPage),
+    queryKey: ['notes', search, page],
+    queryFn: () => fetchNotes(search, page, perPage),
     placeholderData: keepPreviousData,
   });
 
@@ -43,7 +43,7 @@ export default function App() {
 return (
  <div className={css.app}>
 	<header className={css.toolbar}>
-		<SearchBox onSearch={handleSearch}/>
+		<SearchBox value={search} onChange={handleSearch}/>
     
     {data?.results.length > 0 && isSuccess && totalPages > 1 && (
       <ReactPaginate
@@ -54,7 +54,7 @@ return (
         activeClassName={css.active}
       />
     )}
-		<button onClick={handleCreateNote} className={css.button}>Create note +</button>
+		<button onClick={openModal} className={css.button}>Create note +</button>
   </header>
     {isLoading && <Loader/>}
     {isError && <ErrorMessage/>}
