@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import css from '../App/App.module.css'
 import SearchBox from "../SearchBox/SearchBox";
 import { keepPreviousData, useQuery } from '@tanstack/react-query';

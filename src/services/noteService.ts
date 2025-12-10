@@ -20,7 +20,6 @@ export const fetchNotes = async (
   search: string,
   page: number,
   perPage: number,
-  totalPages: number,
 
 ): Promise<FetchNotesResponse> => {
    const response =  await axios.get<FetchNotesResponse>(BASE_URL,
@@ -29,7 +28,6 @@ export const fetchNotes = async (
       search,
       page,
       perPage,
-      totalPages,
      } ,
      headers: {
         Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`
