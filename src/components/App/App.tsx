@@ -10,14 +10,14 @@ import NoteForm from '../NoteForm/NoteForm';
 import Modal from "../Modal/Modal";
 import NoteList from '../NoteList/NoteList';
 import {Toaster} from "react-hot-toast";
-import ReactPaginate from 'react-paginate';
+import Pagination from '../Pagination/Pagination';
 
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [search, setSearchQuery] = useState<string>("");
   const [page, setPage] = useState(1);
-  const perPage = 12;
 
+  const perPage = 12;
   
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -45,13 +45,11 @@ return (
 	<header className={css.toolbar}>
 		<SearchBox value={search} onChange={handleSearch}/>
     
-    {isSuccess && data?.results.length > 0  && totalPages > 1 && (
-      <ReactPaginate
-        pageCount={totalPages}
-        onPageChange={({ selected }) => setPage(selected + 1)}
-        forcePage={page - 1}
-        containerClassName={css.pagination}
-        activeClassName={css.active}
+    {isSuccess && totalPages > 1 && (
+      <Pagination
+        totalPages={totalPages}
+        page={page}
+        setPage={setPage}
       />
     )}
 		<button onClick={openModal} className={css.button}>Create note +</button>
