@@ -3,7 +3,8 @@ import { createPortal } from "react-dom";
 import { useEffect} from 'react';
 
 interface NoteModalProps {
-  onClose: () => void
+  onClose: () => void;
+  children?: React.ReactNode;
 }
 export default function Modal ({onClose}: NoteModalProps) {
    const handleBackdropsClick = (event: React.MouseEvent<HTMLDivElement>) => {

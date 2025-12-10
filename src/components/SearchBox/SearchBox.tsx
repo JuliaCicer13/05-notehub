@@ -1,39 +1,20 @@
 import css from "../SearchBox/SearchBox.module.css"
-import {Formik, Form, Field, type FormikHelpers } from "formik";
 
-interface OrderFormFunction {
-    search: string;
-    onSearch: (newValue: string) => void;
-}
-interface OrderFormValues {
-  search: string;
-  tag: string;
+interface Props {
+  value: string;
+  onChange: (value: string) => void;
 }
 
-const initialValues: OrderFormValues = {
-  search: "",
-  tag: "",
-}
-
-export default function SearchBox ({search, onSearch}: OrderFormFunction) {
-  const handleSubmit = (
-    values: OrderFormValues,
-    actions: FormikHelpers<OrderFormValues>
-  ) => {
-    console.log("Order data:", values);
-    actions.resetForm();
-  }
+export default function SearchBox ({value, onChange}: Props) {
  return (
-   <Formik initialValues={{initialValues}} onSubmit={() => {handleSubmit}}>
-    <Form className={css.form}>
-  <Field
-  className={css.input}
-  type="text"
-  defaultValue={search}
-  onChange={onSearch}
-  placeholder="Search notes"
- />
-    </Form>
-   </Formik>   
-  )
+  <div className={css.searchBoxWrapper}>
+     <input
+      className={css.input}
+      type="text"
+      placeholder="Search notes"
+      value={value}
+      onChange={(e)=> onChange(e.target.value)}
+     />
+  </div>
+ )
 }

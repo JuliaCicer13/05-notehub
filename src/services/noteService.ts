@@ -7,6 +7,8 @@ interface FetchNotesResponse {
     results: Note[];
     page: number;
     perPage: number;
+    totalPages: number;
+    total: number;
 }
 interface CreateNotePayload {
     title: string;
@@ -15,17 +17,19 @@ interface CreateNotePayload {
 }
 
 export const fetchNotes = async (
-  searchQuery: string,
+  search: string,
   page: number,
   perPage: number,
+  totalPages: number,
 
 ): Promise<FetchNotesResponse> => {
    const response =  await axios.get<FetchNotesResponse>(BASE_URL,
     {
      params: {
-      searchQuery,
+      search,
       page,
-      perPage
+      perPage,
+      totalPages,
      } ,
      headers: {
         Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`
@@ -48,13 +52,10 @@ export const createNote = async (payload: CreateNotePayload): Promise<Note> => {
  return response.data;
 };
 export const deleteNote = async (noteId: number): Promise<Note> => {
-    const response = await axios.delete<Note>(
-  `BASE_URL/${noteId}`,
-  {
-    headers: {
+    const response = await axios.delete(`${BASE_URL}/${noteId}`,{
+          headers: {
         Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`,
-    },
-  }
-);
+    }
+  });
 return response.data; 
 }

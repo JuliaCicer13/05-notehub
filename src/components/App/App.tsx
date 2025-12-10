@@ -37,7 +37,7 @@ export default function App() {
     placeholderData: keepPreviousData,
   });
 
-   const totalPages = data?.perPage ?? 0;
+   const totalPages = data?.totalPages ?? 1;
 
 
 return (
@@ -45,7 +45,7 @@ return (
 	<header className={css.toolbar}>
 		<SearchBox value={search} onChange={handleSearch}/>
     
-    {data?.results.length > 0 && isSuccess && totalPages > 1 && (
+    {isSuccess && data?.results.length > 0  && totalPages > 1 && (
       <ReactPaginate
         pageCount={totalPages}
         onPageChange={({ selected }) => setPage(selected + 1)}

@@ -53,7 +53,7 @@ return (
         onSubmit={handleSubmit}>
   <Form className={css.form}>
   <div className={css.formGroup}>
-    <label htmlFor={`${fieldId}-username`}>Title</label>
+    <label htmlFor={`${fieldId}-title`}>Title</label>
     <Field id="title" type="text" name="title" className={css.input} />
   </div>
 
