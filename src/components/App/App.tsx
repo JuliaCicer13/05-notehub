@@ -37,8 +37,8 @@ export default function App() {
     placeholderData: keepPreviousData,
   });
 
-   const totalPages = data?.totalPages ?? 1;
-
+    const results = data?.results ?? [];
+    const totalPages = data?.totalPages ?? 1;
 
 return (
  <div className={css.app}>
@@ -56,7 +56,7 @@ return (
   </header>
     {isLoading && <Loader/>}
     {isError && <ErrorMessage/>}
-    {isSuccess && data?.results.length > 0 && ( <NoteList notes={data.results}/>)}
+    {isSuccess && results.length > 0 && ( <NoteList notes={results}/>)}
      <Toaster position="top-right" reverseOrder={false}/>
      {isModalOpen && (<Modal onClose={closeModal}>
       <NoteForm onSuccess={closeModal}/>
