@@ -4,16 +4,13 @@ import type { Note }from "../types/note";
 const BASE_URL = "https://notehub-public.goit.study/api/notes";
 
 interface FetchNotesResponse {
-    results: Note[];
-    page: number;
-    perPage: number;
+    notes: Note[];
     totalPages: number;
-    total: number;
 }
 interface CreateNotePayload {
     title: string;
     content: string;
-    tag?: string;
+    tag: string;
 }
 
 export const fetchNotes = async (
@@ -33,7 +30,6 @@ export const fetchNotes = async (
         Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`
      },
     });
-        console.log("Raw response:", response.data);
         return response.data;
 }
 

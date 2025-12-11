@@ -37,7 +37,7 @@ export default function App() {
     placeholderData: keepPreviousData,
   });
 
-    const results = data?.results ?? [];
+    const results = data?.notes ?? [];
     const totalPages = data?.totalPages ?? 1;
 
 return (

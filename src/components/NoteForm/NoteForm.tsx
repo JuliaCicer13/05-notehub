@@ -4,6 +4,8 @@ import { Formik, Form, Field} from "formik";
 import { useMutation, useQueryClient} from '@tanstack/react-query';
 import * as Yup from "yup";
 import {createNote} from "../../services/noteService"
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import Loader from "../Loader/Loader";
 
 interface NoteFormProps {
  onSuccess: () => void;
@@ -32,7 +34,7 @@ const {mutate, isPending} = useMutation({
     onSuccess();
   },
   onError: (error) => {
-    console.log(error);
+    <ErrorMessage/>;
   },
 });
 
@@ -79,9 +81,9 @@ return (
   </div>
 
   <div className={css.actions}>
-    <button type="button" className={css.cancelButton}> Cancel</button>
+    <button type="button" className={css.cancelButton} onClick={onSuccess}> Cancel</button>
     <button type="submit" className={css.submitButton} disabled={isPending}>
-     {isPending ? "Creating...": "Create note" }
+     {isPending ? <Loader/> : "Create note" }
     </button>
   </div>
   </Form>
