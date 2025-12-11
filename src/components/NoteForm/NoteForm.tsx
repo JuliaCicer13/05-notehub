@@ -33,7 +33,7 @@ const {mutate, isPending} = useMutation({
     queryClient.invalidateQueries({queryKey: ["notes"]});
     onSuccess();
   },
-  onError: (error) => {
+  onError: () => {
     <ErrorMessage/>;
   },
 });
