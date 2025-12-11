@@ -4,7 +4,7 @@ import { Formik, Form, Field} from "formik";
 import { useMutation, useQueryClient} from '@tanstack/react-query';
 import * as Yup from "yup";
 import {createNote} from "../../services/noteService"
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import {ErrorMessage} from "formik";
 import Loader from "../Loader/Loader";
 
 interface NoteFormProps {
@@ -34,14 +34,14 @@ const {mutate, isPending} = useMutation({
     onSuccess();
   },
   onError: () => {
-    <ErrorMessage/>;
+    
   },
 });
 
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().min(3).max(50).required("Title is required"),
-  content: Yup.string().min(3).required("Content is required"),
+  content: Yup.string().max(500 , "Max length is 500"),
   tag: Yup.string().required(),
 });
 
@@ -57,6 +57,8 @@ return (
   <div className={css.formGroup}>
     <label htmlFor={`${fieldId}-title`}>Title</label>
     <Field id="title" type="text" name="title" className={css.input} />
+    <ErrorMessage name="title" component="p" className={css.error}
+    />
   </div>
 
   <div className={css.formGroup}>
@@ -67,6 +69,7 @@ return (
       rows={8}
       className={css.textarea}
     />
+     <ErrorMessage name="content" component="p" className={css.error}/>
   </div>
 
   <div className={css.formGroup}>
@@ -78,6 +81,7 @@ return (
       <option value="Meeting">Meeting</option>
       <option value="Shopping">Shopping</option>
     </Field>
+     <ErrorMessage name="tag" component="p" className={css.error}/>
   </div>
 
   <div className={css.actions}>

@@ -4,9 +4,9 @@ import { useEffect} from 'react';
 
 interface NoteModalProps {
   onClose: () => void;
-  children?: React.ReactNode;
+  children: React.ReactNode;
 }
-export default function Modal ({onClose}: NoteModalProps) {
+export default function Modal ({onClose, children}: NoteModalProps) {
    const handleBackdropsClick = (event: React.MouseEvent<HTMLDivElement>) => {
    if (event.target === event.currentTarget) {
     onClose();
@@ -42,6 +42,7 @@ return createPortal(
        >
       &times;
     </button>
+    {children}
   </div>
 </div>,
   document.body

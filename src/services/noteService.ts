@@ -9,7 +9,7 @@ interface FetchNotesResponse {
 }
 interface CreateNotePayload {
     title: string;
-    content: string;
+    content: string | null;
     tag: string;
 }
 
@@ -45,8 +45,8 @@ export const createNote = async (payload: CreateNotePayload): Promise<Note> => {
 );
  return response.data;
 };
-export const deleteNote = async (noteId: number): Promise<Note> => {
-    const response = await axios.delete(`${BASE_URL}/${noteId}`,{
+export const deleteNote = async (noteId: string): Promise<Note> => {
+    const response = await axios.delete<Note>(`${BASE_URL}/${noteId}`,{
           headers: {
         Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`,
     }
